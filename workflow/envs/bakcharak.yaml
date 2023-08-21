@@ -1,0 +1,8 @@
+name: bakcharak
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - git=2.38.1
+  - patch=2.7.6

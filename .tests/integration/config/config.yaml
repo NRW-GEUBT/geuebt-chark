@@ -1,0 +1,24 @@
+# Configuration file template
+# Modify the values below as deemed nescessary
+# See the documentation for more informations
+# ------------------------------------------------------------------------------
+
+# Input and Output paths
+# ----------------------
+# Path to the output directory, will be created if it doesn´t exist
+workdir: .tests/integration
+# Path to sample sheet
+sample_sheet: "config/samples.tsv"
+
+# Max number of threads assigned to single jobs
+max_threads_per_job: 1
+
+
+# Databases
+# ---------
+bakcharak_path: "~/.nrw-geuebt/bakCharak"
+
+# Additional parameters
+# ---------------------
+# Species to characterize ("Ecoli", "Campylobacter", "Salmonella" or "Listeria")
+species: "Listeria"

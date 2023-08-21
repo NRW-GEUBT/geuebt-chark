@@ -1,5 +1,6 @@
 import os
 import shutil
+import pandas as pd
 from snakemake.utils import min_version
 from snakemake.utils import validate
 
@@ -12,7 +13,6 @@ shell.executable("bash")
 
 
 configfile: os.path.join(workflow.basedir, "..", ".tests", "integration", "config", "config.yaml")
-
 
 # Validating samples in rules/common
 
@@ -28,13 +28,13 @@ include: "rules/common.smk"
 
 rule all:
     input:
-        "",
+        "staging/merged_sheets.json",
 
 
 # Includes --------------------------------------------------------------------
 
 
-include: ""
+include: "rules/bakcharak.smk"
 
 
 # Workflow --------------------------------------------------------------------
@@ -42,7 +42,7 @@ include: ""
 
 
 onstart:
-    print(f"\nYou are using <REPO NAME> version: {version}")
+    print(f"\nYou are using GEUEBT-CHARAK version: {version}")
     with open(pipe_log, "a") as f:
         f.write(f"[{get_local_time()}]: Pipeline started\n")
 
@@ -66,7 +66,7 @@ onerror:
     print(
         f"\nAn error occured, please consider filing an bug report."
         f"\n"
-        f"\nIssue tracker: <ISSUE LINK>"
+        f"\nIssue tracker: https://github.com/NRW-GEUBT/geuebt-charak/issues"
     )
     with open(pipe_log, "a") as f:
         f.write(f"[{get_local_time()}]: Pipeline stopped on error\n")
