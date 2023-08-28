@@ -13,8 +13,7 @@ validate(config, schema="../schema/config.schema.yaml")
 
 
 # Loading samples ---------------------
-sample_path = config["sample_sheet"]
-samples = pd.read_csv(sample_path, index_col="sample", sep="\t", engine="python")
+samples = pd.read_csv(config["sample_sheet"], index_col="sample", sep="\t", engine="python")
 samples.index = samples.index.astype("str", copy=False)
 
 
