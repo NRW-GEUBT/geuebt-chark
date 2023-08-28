@@ -1,4 +1,9 @@
+# Welcome to the documentation of Geübt-Charak
 
-# Welcome to the documentation of REPO
+This is the characterisation module of NRW-GEÜBT.
 
-TBD
+User uploaded assemblies are processed with the Bakcharak pipeline:
+
+- Serotyping
+- Virulence factor predictions
+- AMR predictions
