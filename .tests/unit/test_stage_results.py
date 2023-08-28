@@ -21,10 +21,10 @@ def test_stage_results():
         # Copy data to the temporary workdir.
         shutil.copytree(data_path, workdir)
         shutil.copy(script_path, workdir)
-        
+
         # run function
         sys.path.insert(0, workdir)
-        from stage_results import main # import main from your script
+        from stage_results import main  # import main from your script
         main(
             summary=[os.path.join(workdir, '16-LI00732-0.bakcharak.json')],
             sheet_out=os.path.join(workdir),
@@ -38,7 +38,7 @@ def test_stage_results():
             os.path.join(expected_path, 'merged.json'), 'r'
         ) as expect:
             assert load(res) == load(expect)
-        
+
         # Testing individual file
         with open(
             os.path.join(workdir, '16-LI00732-0.json'), 'r'
