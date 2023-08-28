@@ -1,7 +1,6 @@
-
 # Geübt Charak
 
-Characterisation module of the Geübt application
+Characterisation module of the Geübt application.
 
 ## Usage
 
