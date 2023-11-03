@@ -55,16 +55,7 @@ diff --unified --recursive --no-dereference bakCharak-orig/bakcharak.py bakChara
    - sed
 diff --unified --recursive --no-dereference bakCharak-orig/database_setup.sh bakCharak/database_setup.sh
 --- bakCharak-orig/database_setup.sh    2023-11-03 11:36:45.615822815 +0100
-+++ bakCharak/database_setup.sh 2023-11-03 12:41:34.000000000 +0100
-@@ -1,7 +1,7 @@
- #!/usr/bin/env bash
- set -e
- set -u
--set -o pipefail
-+# set -o pipefail
-
- #Goal: Download and setup of necessary databases for bakcharak
- #Author: Carlus Deneke, Carlus.Deneke@bfr.bund.de
++++ bakCharak/database_setup.sh 2023-11-03 13:50:03.000000000 +0100
 @@ -88,7 +88,7 @@
          echo "wget -O $REPO_PATH/databases/plasmidblast.tar.gz https://gitlab.bfr.berlin/bfr_bioinformatics/bakcharak_resources/-/raw/main/databases/plasmidblast.tar.gz"
          echo "tar -xzvf $REPO_PATH/databases/plasmidblast.tar.gz"
@@ -83,13 +74,28 @@ diff --unified --recursive --no-dereference bakCharak-orig/database_setup.sh bak
      fi
  fi
 
-@@ -135,24 +135,24 @@
+@@ -135,7 +135,7 @@
          echo "tar -xzf $REPO_PATH/databases/db.tar.gz -C $REPO_PATH/databases/ && mv $REPO_PATH/databases/db $REPO_PATH/databases/platon"
          wget -O $REPO_PATH/databases/db.tar.gz $platon_zenodo_url
          tar -xzf $REPO_PATH/databases/db.tar.gz -C $REPO_PATH/databases/
 -        mv $REPO_PATH/databases/db $REPO_PATH/databases/platon
 +        mv $REPO_PATH/databases/db/* $REPO_PATH/databases/platon
      fi
+ fi
+
+@@ -146,12 +146,12 @@
+   echo "amrfinder -u"
+ else
+   test_amrfinder=`which amrfinder`
+-  if [[ $test_amrfinder == "" ]];then
++  if [[ $test_amrfinder == "" ]]; then
+     echo "Please make sure that the amrfinder software is available: Please activate the bakcharak conda env"
+-   else
++  else
+     echo "amrfinder -u"
+     amrfinder -u
+-   fi
++  fi
  fi
 
 
