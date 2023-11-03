@@ -30,6 +30,7 @@ def main(summary, sheet_out, merged):
             "isolate_id": isolate_id,
             "characterization": report
         }
+        
         mergedlist.append(dict_out)
         with open(os.path.join(sheet_out, f"{isolate_id}.json"), "w") as fo:
             json.dump(dict_out, fo, indent=4)
