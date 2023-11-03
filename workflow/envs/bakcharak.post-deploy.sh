@@ -43,9 +43,28 @@ diff --unified --recursive --no-dereference bakCharak-orig/bakcharak.py bakChara
      parser.add_argument('-n', '--dryrun', help='Snakemake dryrun. Only calculate graph without executing anything', default=False, action='store_true',  required=False)
      parser.add_argument('--threads_sample', help='Number of Threads to use per sample, default = 1', default=1, required=False)
      parser.add_argument('--forceall', help='Snakemake force. Force recalculation of all steps', default=False, action='store_true',  required=False)
+--- bakCharak-orig/envs/bakcharak.yaml  2023-11-03 11:36:46.319887195 +0100
++++ bakCharak/envs/bakcharak.yaml       2023-11-03 12:54:46.000000000 +0100
+@@ -2,6 +2,7 @@
+ channels:
+   - conda-forge
+   - bioconda
++  - default
+ dependencies:
+ # Snakemake
+   - sed
 diff --unified --recursive --no-dereference bakCharak-orig/database_setup.sh bakCharak/database_setup.sh
---- bakCharak-orig/database_setup.sh	2023-08-16 17:27:44.000000000 +0200
-+++ bakCharak/database_setup.sh	2023-08-18 10:32:25.222250560 +0200
+--- bakCharak-orig/database_setup.sh    2023-11-03 11:36:45.615822815 +0100
++++ bakCharak/database_setup.sh 2023-11-03 12:41:34.000000000 +0100
+@@ -1,7 +1,7 @@
+ #!/usr/bin/env bash
+ set -e
+ set -u
+-set -o pipefail
++# set -o pipefail
+
+ #Goal: Download and setup of necessary databases for bakcharak
+ #Author: Carlus Deneke, Carlus.Deneke@bfr.bund.de
 @@ -88,7 +88,7 @@
          echo "wget -O $REPO_PATH/databases/plasmidblast.tar.gz https://gitlab.bfr.berlin/bfr_bioinformatics/bakcharak_resources/-/raw/main/databases/plasmidblast.tar.gz"
          echo "tar -xzvf $REPO_PATH/databases/plasmidblast.tar.gz"
@@ -54,7 +73,7 @@ diff --unified --recursive --no-dereference bakCharak-orig/database_setup.sh bak
 +        tar -xzvf $REPO_PATH/databases/plasmidblast.tar.gz -C $REPO_PATH/databases/
      fi
  fi
- 
+
 @@ -109,7 +109,7 @@
          echo "wget -O $REPO_PATH/databases/mash.tar.gz https://gitlab.bfr.berlin/bfr_bioinformatics/bakcharak_resources/-/raw/main/databases/mash.tar.gz"
          echo "tar -xzvf $REPO_PATH/databases/mash.tar.gz"
@@ -63,28 +82,46 @@ diff --unified --recursive --no-dereference bakCharak-orig/database_setup.sh bak
 +        tar -xzvf $REPO_PATH/databases/mash.tar.gz -C $REPO_PATH/databases/
      fi
  fi
- 
-@@ -126,7 +126,7 @@
-     echo "tar -xzf $REPO_PATH/databases/db.tar.gz -C $REPO_PATH/databases/ && mv $REPO_PATH/databases/db $REPO_PATH/databases/platon"
- 
- else
--    mkdir -p $REPO_PATH/databases/platon
-+    # mkdir -p $REPO_PATH/databases/platon
- 
-     if [[ -f $REPO_PATH/databases/platon/refseq-plasmids.nhr && $force == false ]]; then
-         echo "Skip as data exists already. Use --force to force download"
+
+@@ -135,24 +135,24 @@
+         echo "tar -xzf $REPO_PATH/databases/db.tar.gz -C $REPO_PATH/databases/ && mv $REPO_PATH/databases/db $REPO_PATH/databases/platon"
+         wget -O $REPO_PATH/databases/db.tar.gz $platon_zenodo_url
+         tar -xzf $REPO_PATH/databases/db.tar.gz -C $REPO_PATH/databases/
+-        mv $REPO_PATH/databases/db $REPO_PATH/databases/platon
++        mv $REPO_PATH/databases/db/* $REPO_PATH/databases/platon
+     fi
+ fi
+
+
+@@ -172,10 +172,10 @@
+
+ # TODO clean
+ if [[ $dryrun == false && $cleanup == true ]]; then
+-echo "Cleaning database"
+-#rm $REPO_PATH/databases/db.tar.gz
+-#rm $REPO_PATH/databases/mash.tar.gz
+-#rm $REPO_PATH/databases/plasmidblast.tar.gz
++  echo "Cleaning database"
++  rm $REPO_PATH/databases/db.tar.gz
++  rm $REPO_PATH/databases/mash.tar.gz
++  rm $REPO_PATH/databases/plasmidblast.tar.gz
+ fi
+
+ echo "Done on `date`"
 
 END
 
 # Update nev with bakcharak yaml 
 if [[ $(which mamba) == "" ]];then
-  conda env update --prune --file "$local_dir/envs/bakcharak.yaml" -p $CONDA_PREFIX &> "$local_dir/conda_log.txt"
-  conda update -y -p $CONDA_PREFIX "python>=3.9" &>> "$local_dir/conda_log.txt"
+  conda env update --prune --file "$local_dir/envs/bakcharak.yaml" -p $CONDA_PREFIX &> "$local_dir/deploy_log.txt"
+  conda update -y -p $CONDA_PREFIX "openssl>=3" &>> "$local_dir/deploy_log.txt"
+  # conda update -y -p $CONDA_PREFIX "python>=3.9" &>> "$local_dir/deploy_log.txt"
 else
-  mamba env update --prune --file "$local_dir/envs/bakcharak.yaml" -p $CONDA_PREFIX &> "$local_dir/conda_log.txt"
-  mamba update -y -p $CONDA_PREFIX "python>=3.9" &>> "$local_dir/conda_log.txt"
+  mamba env update --prune --file "$local_dir/envs/bakcharak.yaml" -p $CONDA_PREFIX &> "$local_dir/deploy_log.txt"
+  mamba update -y -p $CONDA_PREFIX openssl=3.1.4 libstdcxx-ng=13.2.0 &>> "$local_dir/deploy_log.txt"
+  # mamba update -y -p $CONDA_PREFIX "openssl>=3"  &>> "$local_dir/deploy_log.txt"
 fi
 
 # Install databases
 echo "Installing databases"
-bash database_setup.sh "$local_dir"
+bash database_setup.sh "$local_dir" --cleanup &>> "$local_dir/deploy_log.txt" 
