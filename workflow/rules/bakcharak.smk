@@ -7,7 +7,7 @@ import os
 checkpoint bakcharak:
     output:
         outdir=directory("bakcharak"),
-        summaries="bakcharak/results/summary/summary_all.tsv",
+        # summaries="bakcharak/results/summary/summary_all.tsv",
     params:
         samples=config["sample_sheet"],
         bakcharak=os.path.join(config["bakcharak_path"], "bakcharak.py"),
@@ -29,10 +29,10 @@ checkpoint bakcharak:
             --working_directory {output.outdir} \
             --species {params.species} \
             --threads {threads} \
-            --threads_sample {params.max_threads_per_job} \
-            --mash_genome_db $HOME/.nrw-geuebt/bakCharak/databases/mash/refseq.genomes.k21s1000.msh \
-            --mash_genome_info $HOME/.nrw-geuebt/bakCharak/databases/mash/refseq.genomes.k21s1000.info \
-            --mash_plasmid_db $HOME/.nrw-geuebt/bakCharak/databases/mash/refseq.plasmid.k21s1000.msh
+            # --threads_sample {params.max_threads_per_job} 
+            # --mash_genome_db $HOME/.nrw-geuebt/bakCharak/databases/mash/refseq.genomes.k21s1000.msh \
+            # --mash_genome_info $HOME/.nrw-geuebt/bakCharak/databases/mash/refseq.genomes.k21s1000.info \
+            # --mash_plasmid_db $HOME/.nrw-geuebt/bakCharak/databases/mash/refseq.plasmid.k21s1000.msh
         """
 
 
