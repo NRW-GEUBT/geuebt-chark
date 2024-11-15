@@ -1,3 +1,7 @@
+### 1.0.0
+
+Rework for integration with Geuebt-API and Metadata V3
+
 ### 0.2.0
 
 Update Bakcharak to Version 3.1.2

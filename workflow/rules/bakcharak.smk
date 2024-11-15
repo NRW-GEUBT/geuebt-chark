@@ -42,6 +42,9 @@ rule stage_results:
     output:
         sheet_out=directory("staging/charak_sheets"),
         merged="staging/merged_sheets.json",
+        qc_out="staging/qc_status.json",
+    params:
+        mongo_uri=config["mongo_uri"],
     message:
         "[BakCharak] Staging results"
     conda:

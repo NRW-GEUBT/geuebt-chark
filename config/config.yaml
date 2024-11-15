@@ -3,6 +3,11 @@
 # See the documentation for more informations
 # ------------------------------------------------------------------------------
 
+# Database
+# --------
+
+mongo_uri: "http://127.0.0.1:8000/API_test"
+
 # Input and Output paths
 # ----------------------
 # Path to the output directory, will be created if it doesn´t exist
