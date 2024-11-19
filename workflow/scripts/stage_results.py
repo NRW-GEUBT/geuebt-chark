@@ -33,7 +33,6 @@ def main(summary, sheet_out, merged, qc_out, uri):
                 charak[k] = v
 
         # Update isolate info
-        print({"characterization": charak})
         response = requests.put(
             urljoin(uri, f"isolates/{isolate_id}/characterization"),
             json={"characterization": charak}
@@ -71,5 +70,5 @@ if __name__ == '__main__':
         snakemake.output['sheet_out'],
         snakemake.output['merged'],
         snakemake.output['qc_out'],
-        snakemake.params['mongo_uri'],
+        snakemake.params['API_url'],
     )

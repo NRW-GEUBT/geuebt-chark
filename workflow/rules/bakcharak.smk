@@ -44,7 +44,7 @@ rule stage_results:
         merged="staging/merged_sheets.json",
         qc_out="staging/qc_status.json",
     params:
-        mongo_uri=config["mongo_uri"],
+        API_url=config["API_url"],
     message:
         "[BakCharak] Staging results"
     conda:
