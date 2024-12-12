@@ -6,7 +6,7 @@
 # Database
 # --------
 
-API_url: "http://127.0.0.1:8000/API_test"
+API_url: "http://127.0.0.1:8010/API_test"
 
 # Input and Output paths
 # ----------------------
@@ -18,6 +18,8 @@ sample_sheet: "config/samples.tsv"
 # Max number of threads assigned to single jobs
 max_threads_per_job: 1
 
+# Clean up workdir on success?
+ephemeral: False
 
 # Databases
 # ---------
@@ -25,5 +27,4 @@ bakcharak_path: "~/.nrw-geuebt/bakCharak"
 
 # Additional parameters
 # ---------------------
-# Species to characterize ("Ecoli", "Campylobacter", "Salmonella" or "Listeria")
-species: "Listeria"
+species: "Listeria monocytogenes"

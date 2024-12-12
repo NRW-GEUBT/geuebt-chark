@@ -28,5 +28,5 @@ bakcharak_path: "~/.nrw-geuebt/bakCharak"
 
 # Additional parameters
 # ---------------------
-# Species to characterize ("Ecoli", "Campylobacter", "Salmonella" or "Listeria")
-species: "Listeria"
+# Species to characterize 
+species: "Listeria monocytogenes"

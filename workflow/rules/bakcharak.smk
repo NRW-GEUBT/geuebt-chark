@@ -4,14 +4,32 @@
 import os
 
 
+rule get_settings:
+    output:
+        settings="staging/settings.json",
+    params:
+        url=config["API_url"],
+        organism=config["species"],
+    message:
+        "[BakCharak] Getting analysis settings"
+    conda:
+        "../envs/pandas.yaml"
+    log:
+        "logs/get_settings.log",
+    script:
+        "../scripts/get_settings.py"
+
+
 checkpoint bakcharak:
+    input:
+        settings="staging/settings.json"
     output:
         outdir=directory("bakcharak"),
         # summaries="bakcharak/results/summary/summary_all.tsv",
     params:
         samples=config["sample_sheet"],
         bakcharak=os.path.join(config["bakcharak_path"], "bakcharak.py"),
-        species=config["species"],
+        species=lambda w, input: get_setting_value(input.settings, "bakcharak_species"),
         max_threads_per_job=config["max_threads_per_job"],
     message:
         "[BakCharak] Characterizing isolates"

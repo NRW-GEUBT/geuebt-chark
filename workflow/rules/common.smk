@@ -1,5 +1,6 @@
 import os
 import time
+import json
 from snakemake.utils import validate
 
 
@@ -19,6 +20,7 @@ samples.index = samples.index.astype("str", copy=False)
 def get_local_time():
     return time.asctime(time.localtime(time.time()))
 
+
 # Input functions ------------------------------------
 def aggregate_summaries(wildcards):
     checkpoint_output = checkpoints.bakcharak.get(**wildcards).output["outdir"]
@@ -26,6 +28,13 @@ def aggregate_summaries(wildcards):
         "bakcharak/results/{isolate_id}/report/{isolate_id}.bakcharak.json",
         isolate_id=samples.index,
     )
+
+
+def get_setting_value(file, value):
+    with open(file, "r") as fi:
+        d = json.load(fi)
+    return d[value]
+
 
 # Validating config ----------------------------------
 validate(config, schema="../schema/config.schema.yaml")
