@@ -5,38 +5,53 @@
 bakcharak_repo="https://gitlab.com/bfr_bioinformatics/bakcharak.git"
 
 # Commit hash to use
-commit="89ab93f6271a20c323e089aed2e79b204ba15f2a" # ver 3.1.2
+commit="48ed26054bde528ea4f2f8a104c3dfb95154fa1e"
+
+VERSION=$(cat "../../VERSION")
 
 # Local directory to save the Repo
-local_dir="$HOME/.nrw-geuebt/bakCharak"
+local_dir="${HOME}/.nrw-geuebt/geuebt-charak-${VERSION}/bakCharak/"
 
 # if already exists, wipe it clean and redo clone
 [ -d "$local_dir" ] && rm -rf "$local_dir"
 
 # clone and checkout repo
-echo "Cloning BakCharak and checking out stable commit"
+echo "Cloning BakCharak and checking out stable commit" &>> "$local_dir/deploy_log.txt"
 git clone -q "$bakcharak_repo" "$local_dir"
 cd "$local_dir"
 git checkout "$commit"
 
 # Patch
-# echo "Applying patches"
-# patch -s --directory="$local_dir" --strip=1 << 'END'
+echo "Applying patches" &>> "$local_dir/deploy_log.txt"
+patch -s --directory="$local_dir" --strip=1 &>> "$local_dir/deploy_log.txt" << 'END' 
+diff --unified --recursive --no-dereference bakcharak-orig/envs/bakcharak_extra.yaml bakcharak/envs/bakcharak_extra.yaml
+--- bakcharak-orig/envs/bakcharak_extra.yaml    2024-12-23 10:43:51.828346873 +0100
++++ bakcharak/envs/bakcharak_extra.yaml 2024-12-23 10:40:40.000000000 +0100
+@@ -17,7 +17,7 @@
+   - fastani[version='>=1.31']
+   - mash[version='>=2.2.2']
+   - mlst[version='>=2.19.0']
+-  - ncbi-amrfinderplus #[version='>=3.12.8']
++  - ncbi-amrfinderplus=3.12.8
+   - platon[version='>=1.6.0']
+   - prodigal[version='>=2.6.3']
+   #- prokka[version='>=1.14.6']
+
+END
 
 # Update nev with bakcharak yaml
-# then fix broken deps and update abricate since it doesn't find perl @INC otherwise
-if [[ $(which mamba) == "" ]];then
-  conda env update --prune --file "$local_dir/envs/bakcharak.yaml" -p $CONDA_PREFIX &> "$local_dir/deploy_log.txt"
-#   conda update -y -p $CONDA_PREFIX openssl=3.1.4 libstdcxx-ng=13.2.0 libiconv=1.17 abricate &>> "$local_dir/deploy_log.txt"
-  conda update y -p $CONDA_PREFIX ncbi-amrfinderplus'>=3.12.8' &>> "$local_dir/deploy_log.txt"
-  amrfinder -u
+if [[ $(which mamba) == "" ]]; then
+  echo $(which conda) &>> "$local_dir/deploy_log.txt"
+  echo $(conda -v) &>> "$local_dir/deploy_log.txt" 
+  conda env update --file "$local_dir/envs/bakcharak_extra.yaml" -p $CONDA_PREFIX &>> "$local_dir/deploy_log.txt"
+  amrfinder -u &>> "$local_dir/deploy_log.txt"
 else
-  mamba env update --file "$local_dir/envs/bakcharak_extra.yaml" -p $CONDA_PREFIX &> "$local_dir/deploy_log.txt"
-#   mamba update -y -p $CONDA_PREFIX openssl=3.1.4 libstdcxx-ng=13.2.0 libiconv=1.17 abricate &>> "$local_dir/deploy_log.txt"
-  mamba update -y -p $CONDA_PREFIX ncbi-amrfinderplus'>=3.12.8' &>> "$local_dir/deploy_log.txt"
-  amrfinder -u
+  echo $(which mamba) &>> "$local_dir/deploy_log.txt"
+  echo $(mamba -V) &>> "$local_dir/deploy_log.txt" 
+  mamba env update --file "$local_dir/envs/bakcharak_extra.yaml" -p $CONDA_PREFIX &>> "$local_dir/deploy_log.txt"
+  amrfinder -u &>> "$local_dir/deploy_log.txt"
 fi
 
 # Install databases
 echo "Installing databases"
-bash "$local_dir/scripts/bakcharak_setup.sh" --amrfinder_update --databases --status &>> "$local_dir/deploy_log.txt" 
+bash "$local_dir/scripts/bakcharak_setup.sh" --amrfinder_update --databases --status --auto &>> "$local_dir/deploy_log.txt" 
