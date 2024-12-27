@@ -7,7 +7,8 @@ bakcharak_repo="https://gitlab.com/bfr_bioinformatics/bakcharak.git"
 # Commit hash to use
 commit="48ed26054bde528ea4f2f8a104c3dfb95154fa1e"
 
-VERSION=$(cat "../../VERSION")
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+VERSION=$(cat "$SCRIPT_DIR/../../VERSION")
 
 # Local directory to save the Repo
 local_dir="${HOME}/.nrw-geuebt/geuebt-charak-${VERSION}/bakCharak/"
